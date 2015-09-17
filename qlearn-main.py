@@ -4,22 +4,26 @@ board = [[1, 1, 1, 1, 1, 1, 1, 1],
          [1, 0, 0, 0, 0, 0, 0, 1],
          [1, 0, 0, 0, 0, 0, 0, 1],
          [1, 0, 0, 0, 0, 0, 0, 1],
+         [1, 0, 0, 0, 0, 0, 0, 1],
+         [1, 0, 0, 0, 0, 0, 0, 1],
+         [1, 0, 0, 0, 0, 0, 0, 1],
+         [1, 0, 0, 0, 0, 0, 0, 1],
          [1, 1, 1, 1, 1, 1, 1, 1]];
 
-rewards =[[0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 50, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 10, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0]];
+rewards = [[0 for i in range(0, len(board[0]))] for j in range(0, len(board))];
+print rewards;
+rewards[2][5] = -50;
+rewards[5][5] = 100;
 
 GRAPHICAL_DISPLAY = True;
 posFreq = {};
 
-agentStart = [3, 4];
+agentStart = [3, 1];
 dude = Agent(agentStart[0], agentStart[1], board, rewards);
 dudeColor = (0, 128, 255);
 wallColor = (255, 128, 0);
 rewardColor = (0, 255, 0);
+reset = False;
 
 if GRAPHICAL_DISPLAY:
     import sys, pygame
@@ -28,29 +32,38 @@ if GRAPHICAL_DISPLAY:
     done = False;
     while not done:
         screen.fill((0, 0, 0));
+        if reset:
+            dude.pos = (agentStart[0], agentStart[1])
+            reset = False;
+            
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True;
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                dude.act();
+                dude.act();                   
                 posFreq[dude.pos] = 0 if dude.pos not in posFreq else posFreq[dude.pos] + 1;
-                
+                if (rewards[dude.pos[0]][dude.pos[1]] != 0):
+                    reset = True;
         
-        dudeRect = pygame.Rect(dude.pos[0]*50, dude.pos[1]*50, 50, 50);
+        dudeRect = pygame.Rect(dude.pos[1]*50, dude.pos[0]*50, 50, 50);
         
-        for i in range(0, len(board)):
-            for j in range(0, len(board[i])):
-                if board[i][j] == 1:
-                    pygame.draw.rect(screen, wallColor, pygame.Rect(i*50, j*50, 50, 50));
-                elif rewards[i][j] > 0:
-                    pygame.draw.rect(screen, rewardColor, pygame.Rect(i*50, j*50, 50, 50));
+        for r in range(0, len(board)):
+            for c in range(0, len(board[0])):
+                if board[r][c] == 1:
+                    pygame.draw.rect(screen, wallColor, pygame.Rect(c*50, r*50, 50, 50));
+                elif rewards[r][c] > 0:
+                    pygame.draw.rect(screen, (0, min(rewards[r][c], 255), 0), pygame.Rect(c*50, r*50, 50, 50));
+                elif rewards[r][c] < 0:
+                    pygame.draw.rect(screen, (min(abs(rewards[r][c]), 255), 0, 0), pygame.Rect(c*50, r*50, 50, 50));
         pygame.draw.rect(screen, dudeColor, dudeRect)
         pygame.display.flip();
     pygame.quit();
     sys.exit();
 else:
+    print "yo";
     for i in range(0, 30000):
         dude.act();
+        posFreq[dude.pos] = 0 if dude.pos not in posFreq else posFreq[dude.pos] + 1;
     freqList = [(i, posFreq[i]) for i in posFreq.keys()];
     for f in freqList:
         print f;

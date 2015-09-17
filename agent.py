@@ -1,5 +1,6 @@
 from collections import deque;
 from random import randint;
+from random import random;
 class Agent:
     def __init__(self, r, c, board, rewards):
         self.pos = (r, c);
@@ -12,12 +13,18 @@ class Agent:
         self.memory = deque();
         self.alpha = 0.5;
         self.gamma = 0.9;
+        self.epsilon = 0.1;
 
     def chooseAction (self, actions):
         Q = [self.getQ((self.pos, i)) for i in actions];
         # choose the highest Q value, and if there is a tie, then select randomly from them.
         maxQ = max(Q);
 
+        if random() < self.epsilon:
+            mag = max(abs(min(Q)), abs(maxQ))
+            Q = [self.getQ((self.pos, i)) + random() * mag - .5 * mag for i in actions];
+            maxQ = max(Q);
+        
         best = [actions[i] for i in range(0, len(Q)) if Q[i] == maxQ];
         pick = best[randint(0, len(best) - 1)];
         
