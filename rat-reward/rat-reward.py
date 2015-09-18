@@ -1,4 +1,4 @@
-from agent import Agent;
+from rat import Rat;
 
 board = [[1, 1, 1, 1, 1, 1, 1, 1],
          [1, 0, 0, 0, 0, 0, 0, 1],
@@ -21,7 +21,7 @@ ITER_SPEED = 2;
 posFreq = {};
 
 agentStart = [3, 1];
-dude = Agent(agentStart[0], agentStart[1], board, rewards);
+dude = Rat(agentStart[0], agentStart[1], board, rewards);
 dudeColor = (0, 128, 255);
 wallColor = (255, 128, 0);
 rewardColor = (0, 255, 0);

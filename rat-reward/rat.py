@@ -1,11 +1,9 @@
 from collections import deque;
 from random import randint;
 from random import random;
-class Agent:
+class Rat:
     def __init__(self, r, c, board, rewards):
         self.pos = (r, c);
-        self.lastAction = None;
-
         self.board = board;
         self.rewards = rewards;
         self.MAX_MEM = 1;
@@ -69,10 +67,6 @@ class Agent:
         gammaTerm = self.gamma * max([self.getQ((nextState, a)) for a in nextActions]);
         self.env[(thisState, thisAction)] = Qsa + self.alpha*(rewardTerm + gammaTerm - Qsa);
         self.pos = nextState;
-        self.lastAction = thisAction;
-        # (2, 3) is the optimal reward position, the best case for this artificial intel is to
-        # move from (3, 3) to (2, 3) or something over and over and over to keep maximizing that
-        # reward, like a rat who has been given cocaine.
 
         
 
