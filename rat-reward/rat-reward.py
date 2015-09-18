@@ -16,6 +16,8 @@ rewards[2][5] = -50;
 rewards[5][5] = 100;
 
 GRAPHICAL_DISPLAY = True;
+USER_INPUT = False;
+ITER_SPEED = 2;
 posFreq = {};
 
 agentStart = [3, 1];
@@ -30,6 +32,7 @@ if GRAPHICAL_DISPLAY:
     pygame.init();
     screen = pygame.display.set_mode((800, 600));
     done = False;
+    runCount = 0;
     while not done:
         screen.fill((0, 0, 0));
         if reset:
@@ -39,11 +42,19 @@ if GRAPHICAL_DISPLAY:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True;
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            elif USER_INPUT and event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 dude.act();                   
                 posFreq[dude.pos] = 0 if dude.pos not in posFreq else posFreq[dude.pos] + 1;
                 if (rewards[dude.pos[0]][dude.pos[1]] != 0):
                     reset = True;
+            elif not USER_INPUT:
+                runCount += 1;
+                if runCount == ITER_SPEED:
+                    runCount = 0;
+                    dude.act();
+                    posFreq[dude.pos] = 0 if dude.pos not in posFreq else posFreq[dude.pos] + 1;
+                    if (rewards[dude.pos[0]][dude.pos[1]] != 0):
+                       reset = True;
         
         dudeRect = pygame.Rect(dude.pos[1]*50, dude.pos[0]*50, 50, 50);
         
