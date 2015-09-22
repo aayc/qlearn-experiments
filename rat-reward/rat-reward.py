@@ -71,7 +71,6 @@ if GRAPHICAL_DISPLAY:
     pygame.quit();
     sys.exit();
 else:
-    print "yo";
     for i in range(0, 30000):
         dude.act();
         posFreq[dude.pos] = 0 if dude.pos not in posFreq else posFreq[dude.pos] + 1;

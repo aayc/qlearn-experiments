@@ -25,7 +25,7 @@ def aiMakeMove (ai):
     res = ai.act(board);
     return (res, getReward(res, ai.playNum) != 0);
         
-GRAPHICAL_DISPLAY = True;
+GRAPHICAL_DISPLAY = False;
 USER_INPUT = False;
 USER_CAN_PLAY = False;
 TILE_SIZE = 100;
@@ -119,7 +119,7 @@ if GRAPHICAL_DISPLAY:
                         if isTie(board):
                             reset = True;
                             numTies += 1;
-                        
+                            continue;
                         
                         res = aiMakeMove(ais[0]);
                         board = res[0];
